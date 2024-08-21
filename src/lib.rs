@@ -490,7 +490,7 @@ impl Dialogue {
 	}
 }
 
-struct AssFileOptions{}
+pub struct AssFileOptions{}
 
 /// `script`, `v4` and `event` are fields in `Components`
 #[derive(Clone)]
