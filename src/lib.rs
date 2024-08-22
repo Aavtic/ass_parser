@@ -537,7 +537,7 @@ impl Dialogue {
         dialogue_string.push_str(&(self.event.marginr.as_ref().unwrap().to_owned() + ","));
         dialogue_string.push_str(&(self.event.marginv.as_ref().unwrap().to_owned() + ","));
         dialogue_string.push_str(&(self.event.effect.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.text.as_ref().unwrap().to_owned() + ",\n"));
+        dialogue_string.push_str(&(self.event.text.as_ref().unwrap().to_owned() + "\n"));
 
         return dialogue_string;
     }
@@ -709,14 +709,17 @@ impl Parser {
         v4_lines.push("Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n".to_string());
         v4_lines.push(V4_STYLE_HEAD.to_string());
 
-        for value in array {
+        for (i, value) in array.into_iter().enumerate() {
             let style_val = value.clone().unwrap();
-            values.push(style_val + ",");
+            if i < (array.len() -1) {
+                values.push(style_val + ",");
+            } else {
+                values.push(style_val);
+            }
         }
 
         values.push("\n".to_string());
 
-        println!("{:?}", values);
         v4_lines.append(&mut values); 
 
         for line in v4_lines {
@@ -968,7 +971,6 @@ impl AssFile {
 
         let file_data = parser.combine_components(components);
         write_contents(filename, &file_data);
-        println!("File saved successfully");
     }
 }
 
