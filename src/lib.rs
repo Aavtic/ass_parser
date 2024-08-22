@@ -711,7 +711,7 @@ impl Parser {
 
         for (i, value) in array.into_iter().enumerate() {
             let style_val = value.clone().unwrap();
-            if i < (array.len() -1) {
+            if i < (array.len()-1) {
                 values.push(style_val + ",");
             } else {
                 values.push(style_val);
@@ -991,9 +991,9 @@ impl AssFileOptions{
         let reversed_hex_color = format!("{}{}{}", blue_hex, green_hex, red_hex);
 
         // let mut ass_format_color = format!(r"\c&H{}&", reversed_hex_color);
-        let mut ass_format_color = format!(r"&H{}", reversed_hex_color);
-        ass_format_color.push('}');
-        ass_format_color = "{".to_owned() + &ass_format_color;
+        let ass_format_color = format!("&H{}", reversed_hex_color);
+        // ass_format_color.push('}');
+        // ass_format_color = "{".to_owned() + &ass_format_color;
 
         return ass_format_color;
     }
