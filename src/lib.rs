@@ -274,12 +274,14 @@ impl V4Format {
 impl V4Format {
     // Ik this looks crazy. but what do?
     /// set the name for the V4 field.
+    /// The name of the Style. Case sensitive. Cannot include commas
 	pub fn set_name(&mut self,
                     value: String) -> &mut Self{
         self.name = Some(value);
         self
 	}
     /// set the fontname for the V4 field.
+    /// The fontname as used by Windows. Case-sensitive.
 	pub fn set_fontname(&mut self,
                         value: String) -> &mut Self{
         self.fontname = Some(value);
@@ -292,120 +294,225 @@ impl V4Format {
         self
 	}
     /// set the primarycolour for the V4 field.
+    /// ```rust
+    /// use ass_parser::{self, AssFile, ScriptInfo, V4Format, Events, AssFileOptions};
+    /// use hex_color::HexColor;
+    /// 
+    /// fn main() {
+    ///     let mut ass_file = AssFile::new();
+    ///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+    /// 
+    ///     ass_file.components.script
+    ///         .set_script(ScriptInfo::default());
+    /// 
+    ///     ass_file.components.v4
+    ///         .set_v4(V4Format::default())
+    ///         .set_primarycolour(hexcolor);
+    /// 
+    ///     ass_file.components.events
+    ///         .set_events(Events::default());
+    /// 
+    ///     AssFile::save_file(&ass_file, "new_subtitles.ass")
+    /// }
+    /// ```
 	pub fn set_primarycolour(&mut self,
                              value: String) -> &mut Self{
         self.primarycolour = Some(value);
         self
 	}
     /// set the secondarycolour for the V4 field.
+    /// ```rust
+    /// use ass_parser::{self, AssFile, ScriptInfo, V4Format, Events, AssFileOptions};
+    /// use hex_color::HexColor;
+    /// 
+    /// fn main() {
+    ///     let mut ass_file = AssFile::new();
+    ///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+    /// 
+    ///     ass_file.components.script
+    ///         .set_script(ScriptInfo::default());
+    /// 
+    ///     ass_file.components.v4
+    ///         .set_v4(V4Format::default())
+    ///         .set_secondarycolour(hexcolor);
+    /// 
+    ///     ass_file.components.events
+    ///         .set_events(Events::default());
+    /// 
+    ///     AssFile::save_file(&ass_file, "new_subtitles.ass")
+    /// }
+    /// ```
 	pub fn set_secondarycolour(&mut self,
                                value: String) -> &mut Self{
         self.secondarycolour = Some(value);
         self
 	}
     /// set the outlinecolour for the V4 field.
+    /// ```rust
+    /// use ass_parser::{self, AssFile, ScriptInfo, V4Format, Events, AssFileOptions};
+    /// use hex_color::HexColor;
+    /// 
+    /// fn main() {
+    ///     let mut ass_file = AssFile::new();
+    ///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+    /// 
+    ///     ass_file.components.script
+    ///         .set_script(ScriptInfo::default());
+    /// 
+    ///     ass_file.components.v4
+    ///         .set_v4(V4Format::default())
+    ///         .set_outlinecolour(hexcolor);
+    /// 
+    ///     ass_file.components.events
+    ///         .set_events(Events::default());
+    /// 
+    ///     AssFile::save_file(&ass_file, "new_subtitles.ass")
+    /// }
+    /// ```
 	pub fn set_outlinecolour(&mut self,
                              value: String) -> &mut Self{
         self.outlinecolour = Some(value);
         self
 	}
     /// set the backcolour for the V4 field.
+    /// ```rust
+    /// use ass_parser::{self, AssFile, ScriptInfo, V4Format, Events, AssFileOptions};
+    /// use hex_color::HexColor;
+    /// 
+    /// fn main() {
+    ///     let mut ass_file = AssFile::new();
+    ///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+    /// 
+    ///     ass_file.components.script
+    ///         .set_script(ScriptInfo::default());
+    /// 
+    ///     ass_file.components.v4
+    ///         .set_v4(V4Format::default())
+    ///         .set_backcolour(hexcolor);
+    /// 
+    ///     ass_file.components.events
+    ///         .set_events(Events::default());
+    /// 
+    ///     AssFile::save_file(&ass_file, "new_subtitles.ass")
+    /// }
+    /// ```
 	pub fn set_backcolour(&mut self,
                           value: String) -> &mut Self{
         self.backcolour = Some(value);
         self
 	}
     /// set the bold for the V4 field.
+    /// This defines whether text is bold (true) or not (false). -1 is True, 0 is False. This is independant of the Italic attribute - you can have have text which is both bold and italic
 	pub fn set_bold(&mut self,
                     value: String) -> &mut Self{
         self.bold = Some(value);
         self
 	}
     /// set the italic for the V4 field.
+    /// This defines whether text is italic (true) or not (false). -1 is True, 0 is False. This is independant of the bold attribute - you can have have text which is both bold and italic.
 	pub fn set_italic(&mut self,
                       value: String) -> &mut Self{
         self.italic = Some(value);
         self
 	}
     /// set the underline for the V4 field.
+    ///  use either of [-1 or 0] where -1 is considered True and 0 is considered False.
 	pub fn set_underline(&mut self,
                          value: String) -> &mut Self{
         self.underline = Some(value);
         self
 	}
     /// set the strikeout for the V4 field.
+    ///  use either of [-1 or 0] where -1 is considered True and 0 is considered False.
 	pub fn set_strikeout(&mut self,
                          value: String) -> &mut Self{
         self.strikeout = Some(value);
         self
 	}
     /// set the scalex for the V4 field.
+    /// ScaleX. Modifies the width of the font. [percent]
 	pub fn set_scalex(&mut self,
                       value: String) -> &mut Self{
         self.scalex = Some(value);
         self
 	}
     /// set the scaley for the V4 field.
+    /// ScaleX. Modifies the height of the font. [percent]
 	pub fn set_scaley(&mut self,
                       value: String) -> &mut Self{
         self.scaley = Some(value);
         self
 	}
     /// set the spacing for the V4 field.
+    ///  Extra space between characters. [pixels]
 	pub fn set_spacing(&mut self,
                        value: String) -> &mut Self{
         self.spacing = Some(value);
         self
 	}
     /// set the angle for the V4 field.
+    /// The origin of the rotation is defined by the alignment. Can be a floating point number. [degrees]
 	pub fn set_angle(&mut self,
                      value: String) -> &mut Self{
         self.angle = Some(value);
         self
 	}
     /// set the borderstyle for the V4 field.
+    ///  pass either 1 or 3. where 1=Outline + drop shadow, 3=Opaque box.
 	pub fn set_borderstyle(&mut self,
                            value: String) -> &mut Self{
         self.borderstyle = Some(value);
         self
 	}
     /// set the outline for the V4 field.
+    /// If BorderStyle is 1,  then this specifies the width of the outline around the text, in pixels.
+    /// Values may be 0, 1, 2, 3 or 4.
 	pub fn set_outline(&mut self,
                        value: String) -> &mut Self{
         self.outline = Some(value);
         self
 	}
     /// set the shadow for the V4 field.
+    /// If BorderStyle is 1,  then this specifies the depth of the drop shadow behind the text, in pixels. Values may be 0, 1, 2, 3 or 4. Drop shadow is always used in addition to an outline. 
 	pub fn set_shadow(&mut self,
                       value: String) -> &mut Self{
         self.shadow = Some(value);
         self
 	}
     /// set the alignment for the V4 field.
+    /// This sets how text is "justified" within the Left/Right onscreen margins, and also the vertical placing. Values may be 1=Left, 2=Centered, 3=Right. Add 4 to the value for a "Toptitle". Add 8 to the value for a "Midtitle".
+    /// eg. 5 = left-justified toptitle
 	pub fn set_alignment(&mut self,
                          value: String) -> &mut Self{
         self.alignment = Some(value);
         self
 	}
     /// set the marginl for the V4 field.
+    /// This defines the Left Margin in pixels. It is the distance from the left-hand edge of the screen.The three onscreen margins (MarginL, MarginR, MarginV) define areas in which the subtitle text will be displayed.
 	pub fn set_marginl(&mut self,
                        value: String) -> &mut Self{
         self.marginl = Some(value);
         self
 	}
     /// set the marginr for the V4 field.
+    /// This defines the Right Margin in pixels. It is the distance from the right-hand edge of the screen. The three onscreen margins (MarginL, MarginR, MarginV) define areas in which the subtitle text will be displayed.
 	pub fn set_marginr(&mut self,
                        value: String) -> &mut Self{
         self.marginr = Some(value);
         self
 	}
     /// set the marginv for the V4 field.
+    /// This defines the vertical Left Margin in pixels.
+    /// For a subtitle, it is the distance from the bottom of the screen.
+    /// For a toptitle, it is the distance from the top of the screen.
+    /// For a midtitle, the value is ignored - the text will be vertically centred.
 	pub fn set_marginv(&mut self,
                        value: String) -> &mut Self{
         self.marginv = Some(value);
         self
 	}
     /// set the encoding for the V4 field.
+    /// This specifies the font character set or encoding and on multi-lingual Windows installations it provides access to characters used in multiple than one languages. It is usually 0 (zero) for English (Western, ANSI) Windows.
 	fn set_encoding(&mut self, value: String) -> &mut Self{
         self.encoding = Some(value);
         self
