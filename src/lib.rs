@@ -884,11 +884,9 @@ impl Parser {
 //["Default", "Arial", "16", "&Hffffff", "&Hffffff", "&H0", "&H0", "0", "0", "0", "0", "100", "100", "0", "0", "1", "1", "0", "2", "10", "10", "10", "1"]
     }
     fn get_info(&self, lines: &Vec<&str>, header: &str) -> Vec<String> {
-        println!("{:?}", lines);
         let mut script_lines = Vec::new();
         let mut found_script_header = false;
         for line in lines {
-            println!("{:?}, {:?}, {:?}", *line, header, *line== header);
             let line = if line.ends_with('\n') {
                 &line[..line.len()-1]
             } else if line.ends_with('\r'){
@@ -899,7 +897,6 @@ impl Parser {
                 line
             };
             if line == header{
-                println!("found");
                 found_script_header = true;
                 script_lines.push(line.to_string());
                 script_lines.push("\n".to_string());
