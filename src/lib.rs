@@ -269,7 +269,6 @@ impl V4Format {
             ]
     }
 
-    fn get_
 }
 
 impl V4Format {
@@ -608,7 +607,7 @@ pub struct Components {
 ///  file`.
 
 pub struct AssFile{
-    ass_file: String,
+    _ass_file: String,
     /// Each components present in a `.ass` file. 
     /// They are `script` `v4` and `events`.
     pub components: Components,
@@ -625,7 +624,7 @@ impl Deref for AssFile {
 impl AssFile {
     pub fn new() -> AssFile {
         AssFile {
-            ass_file: String::new(),
+            _ass_file: String::new(),
             components: Components {
                 script: ScriptInfo::new(),
                 v4: V4Format::new(),
@@ -641,11 +640,6 @@ impl Parser {
         Parser
     }
 
-    fn _plug_script(&self, scriptinfo: ScriptInfo) {
-        let script_values = scriptinfo.get_key_values();
-        let script_data = &self.stringify_script(script_values);
-    }
-
     fn stringify_script(&self, scriptinfo: Vec<[&str; 2]>) -> String {
         let mut contents = String::new();
 
@@ -655,17 +649,14 @@ impl Parser {
         contents
     }
 
-    fn combine_components(&self, components: &Components, contents: String) -> String {
+    fn combine_components(&self, components: &Components) -> String {
         let components = components.clone();
         let script = components.script;
         let v4 = components.v4;
         let events = components.events;
-        let lines:Vec<&str> = contents.split("\n").collect();
-        let  script_lines = self.get_info(&lines, SCRIPT_HEADER);
-        let mut _v4_lines = &self.get_info(&lines, V4_HEADER);
-        let mut _events_lines = &self.get_info(&lines, EVENTS_HEADER);
+        let scriptinfo  = script.get_key_values();
 
-        let script_data  = &self.plug_script(script_lines, script);
+        let script_data = &self.stringify_script(scriptinfo);
         let v4_data = &self.plug_v4(v4);
         let event_data = &self.plug_events(events);
         let total_data = format!("{}\n\n{}\n\n{}", script_data, v4_data, event_data);
@@ -673,7 +664,7 @@ impl Parser {
         return total_data;
     }
 
-    fn plug_script(&self, script_lines: Vec<String>, scriptinfo: ScriptInfo) -> String {
+    fn _plug_script(&self, script_lines: Vec<String>, scriptinfo: ScriptInfo) -> String {
         let mut new_lines = script_lines.clone();
         let mut total_lines = String::new();
         let script_type = scriptinfo.scripttype.unwrap();
@@ -893,10 +884,22 @@ impl Parser {
 //["Default", "Arial", "16", "&Hffffff", "&Hffffff", "&H0", "&H0", "0", "0", "0", "0", "100", "100", "0", "0", "1", "1", "0", "2", "10", "10", "10", "1"]
     }
     fn get_info(&self, lines: &Vec<&str>, header: &str) -> Vec<String> {
+        println!("{:?}", lines);
         let mut script_lines = Vec::new();
         let mut found_script_header = false;
         for line in lines {
-            if *line == header{
+            println!("{:?}, {:?}, {:?}", *line, header, *line== header);
+            let line = if line.ends_with('\n') {
+                &line[..line.len()-1]
+            } else if line.ends_with('\r'){
+                &line[..line.len()-1]
+            }else if line.ends_with("\r\n"){
+                &line[..line.len()-2]
+            }else {
+                line
+            };
+            if line == header{
+                println!("found");
                 found_script_header = true;
                 script_lines.push(line.to_string());
                 script_lines.push("\n".to_string());
@@ -924,14 +927,14 @@ impl AssFile {
     /// # Example
     /// ```rust
     /// # use ass_parser::AssFile;
-    /// let mut ass_file = ass_parser::AssFile::from_file("subtitle_file.ass".to_string());
+    /// let mut ass_file = ass_parser::AssFile::from_file("src/subtitles.ass".to_string());
     /// ```
     pub fn from_file(filename: String) -> AssFile {
         let file_contents = get_contents(&filename).unwrap();
         let parser = Parser::new();
         let components = parser.get_each_components(file_contents);
         Self{
-            ass_file: filename,
+            _ass_file: filename,
             components,
         }
     }
@@ -965,9 +968,8 @@ impl AssFile {
     pub fn save_file(file_components: &AssFile, filename: &str) {
         let parser = Parser::new();
         let components = &file_components.components;
-        let contents = get_contents(&file_components.ass_file).unwrap();
 
-        let file_data = parser.combine_components(components, contents);
+        let file_data = parser.combine_components(components);
         write_contents(filename, &file_data);
         println!("File saved successfully");
     }
