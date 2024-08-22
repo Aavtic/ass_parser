@@ -1,4 +1,14 @@
- # AssParser
+
+<div align="center">
+
+[![Crate Badge]][Crate] [![Docs Badge]][API Docs] [![Deps.rs
+Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/d/ass_parser)
+
+</div>
+
+
+ 
+# AssParser
  
  [ass_parser] is a crate to parse .ass (Advanced SubStation Alpha) files. which is a subtitle file for creating and displaying subtitles in video files. It is widely used due to it's complex text formatting, positioning and styling. The Advanced SubStation Alpha is a successor
  to the SubStation Alpha .ssa file.
@@ -76,5 +86,10 @@
  
  [FFmpeg]: https://www.ffmpeg.org/about.html
  [ass_parser]: https://github.com/Aavtic/ass_parser
-
-
+ [Crate Badge]: https://img.shields.io/crates/v/ass_parser?logo=rust&style=flat-square&logoColor=E05D44&color=E05D44
+[Docs Badge]: https://img.shields.io/docsrs/ass_parser?logo=rust&style=flat-square&logoColor=E05D44
+[Crate]: https://crates.io/crates/ass_parser/
+[Api Docs]: https://docs.rs/ass_parser/latest/ass_parser/
+[Deps.rs Badge]: https://deps.rs/repo/github/aavtic/ass_parser/status.svg?style=flat-square
+[Deps.rs]: https://deps.rs/crate/ass_parser
+ 
