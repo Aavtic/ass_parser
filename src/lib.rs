@@ -14,8 +14,67 @@
 ///! 
 ///! AssParser is based on the principle of easy to read write and modify `.ass` files. This is the first version of `ass_parser`and now currently only have the features to modify `.ass` file.
 ///! 
+///! # Example
 ///! 
+/// Creating a simple `Advanced SubStation Alpha` `(.ass)` file with default values!
+///
+/// ```rust
+/// use ass_parser::{self, AssFile, ScriptInfo, V4Format, Events, AssFileOptions};
+/// use hex_color::HexColor;
+/// 
+/// fn main() {
+///     let mut ass_file = AssFile::new();
+///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+/// 
+///     ass_file.components.script
+///         .set_script(ScriptInfo::default());
+/// 
+///     ass_file.components.v4
+///         .set_v4(V4Format::default())
+///         .set_primarycolour(hexcolor);
+/// 
+///     ass_file.components.events
+///         .set_events(Events::default());
+/// 
+///     AssFile::save_file(&ass_file, "new_subtitles.ass")
+/// 
+/// }
+/// 
+/// ```
+/// Here we create an .ass file with default values and When you open the .ass file you can see the
+/// following content.
+/// ```
+/// ScriptType: v4.00+
+/// PlayResX: 384
+/// PlayResY: 288
+/// ScaledBorderAndShadow: yes
+/// YCbCr Matrix: None
+/// 
+/// 
+/// [V4+ Styles]
+/// Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+/// Style: Default,Arial,16,&H00ff,&Hffffff,&H0,&H0,0,0,0,0,100,100,0,0,1,1,0,2,10,10,10,1
+/// 
+/// 
+/// [Events]
+/// Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+/// Dialogue: 0,0:00:00.00,0:00:01.00,Default,,0,0,0,,Hello Friend
+/// ```
+///
+/// You can burn this subtitle file to a video or use any video player to select a video file along
+/// with this subtitle file.
+///
+/// # Using [FFmpeg] to burn the video with the subtitles file.
+///
+/// You will first have to download and install [FFmpeg] on your system to try this. Once you have
+/// downloaded you can use the following command to burn the video file `video.avi` and the
+/// generated subtitle file `new_subtitles.ass` to a single output video file `output.avi`
+///
+/// ```shell
+/// ffmpeg -i video.avi -vf "ass=new_subtitles.ass" output.avi
+/// ```
 ///! 
+///! [FFmpeg]: https://www.ffmpeg.org/about.html
 ///! [ass_parser]: https://github.com/Aavtic/ass_parser
 
 
@@ -106,20 +165,30 @@ impl ScriptInfo {
     /// After creating the `AssFile` set the scripttype of the .ass file.
     /// If you want to specify any, the default ScriptType from the original `.ass` file will be
     /// used.
+    /// This is the SSA script format version eg. "V4.00". It is used by SSA to give a warning if
+    /// you are using a version of SSA older than the version that created the script.
+    /// ASS version is “V4.00+”.
     pub fn set_scripttype(&mut self, value: String) -> &mut Self {
 		self.scripttype = Some(value);
 		self
 	}
     /// After creating the `AssFile` set the playresx of the .ass file.
-    /// If you want to specify any, the default playresx from the original `.ass` file will be
+    ///
+    /// This is the height of the screen used by the script's author(s) when playing the script. SSA v4 will automatically select the nearest enabled setting, if you are using Directdraw playback.
+    ///
+    /// If you don't want to specify any, the default playresx from the original `.ass` file will be
     /// used.
     pub fn set_playresx(&mut self, value: String) -> &mut Self {
 		self.playresx = Some(value);
 		self
 	}
     /// After creating the `AssFile` set the playresy of the .ass file.
+    ///
+    /// This is the height of the screen used by the script's author(s) when playing the script. SSA v4 will automatically select the nearest enabled setting, if you are using Directdraw playback.
+    ///
     /// If you want to specify any, the default playresy from the original `.ass` file will be
     /// used.
+    /// 
     pub fn set_playresy(&mut self, value: String) -> &mut Self {
 		self.playresy = Some(value);
 		self
@@ -651,42 +720,69 @@ impl Dialogue {
 }
 
 impl Dialogue {
+    /// set the layer
+    /// Layer (any integer)
+    /// Subtitles having different layer number will be ignored during the collusion detection.
+    /// Higher numbered layers will be drawn over the lower numbered.
     fn set_layer(mut self, value: String) -> Self {
 		self.event.layer = Some(value);
 		self
 	}
+    /// set the start time of the subtitle.
+    /// Start Time of the Event, in 0:00:00:00 format ie. Hrs:Mins:Secs:hundredths. This is the time elapsed during script playback at which the text will appear onscreen. Note that there is a single digit for the hours!
     fn set_start(mut self, value: String) -> Self {
 		self.event.start = Some(value);
 		self
-	}
+    }
+	/// set the end time of the subtitle.
+    ///  End Time of the Event, in 0:00:00:00 format ie. Hrs:Mins:Secs:hundredths. This is the time elapsed during script playback at which the text will disappear offscreen. Note that there is a single digit for the hours!
     fn set_end(mut self, value: String) -> Self {
 		self.event.end = Some(value);
 		self
 	}
+    /// set the style.
+    /// Style name. If it is "Default", then your own *Default style will be subtituted.
+    ///However, the Default style used by the script author IS stored in the script even though SSA ignores it - so if you want to use it, the information is there - you could even change the Name in the Style definition line, so that it will appear in the list of "script" styles.
     fn set_style(mut self, value: String) -> Self {
 		self.event.style = Some(value);
 		self
 	}
+    /// set name.
+    ///  Character name. This is the name of the character who speaks the dialogue. It is for information only, to make the script is easier to follow when editing/timing.
     fn set_name(mut self, value: String) -> Self {
 		self.event.name = Some(value);
 		self
 	}
+    /// set the marginl
+    /// 4-figure Left Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
     fn set_marginl(mut self, value: String) -> Self {
 		self.event.marginl = Some(value);
 		self
 	}
+    /// set the marginr
+    ///  4-figure Right Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
     fn set_marginr(mut self, value: String) -> Self {
 		self.event.marginr = Some(value);
 		self
 	}
+    /// set the marginv
+    ///  4-figure Bottom Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
     fn set_marginv(mut self, value: String) -> Self {
 		self.event.marginv = Some(value);
 		self
 	}
+    /// set effects for the Dialogue object.
+    /// Transition Effect. This is either empty, or contains information for one of the three transition effects implemented in SSA v4.x
+    /// The effect names are case sensitive and must appear exactly as shown. The effect names do not have quote marks around them.
+    /// "Karaoke" means that the text will be successively highlighted one word at a time.
+    /// Karaoke as an effect type is obsolete.
     fn set_effect(mut self, value: String) -> Self {
 		self.event.effect = Some(value);
 		self
 	}
+    /// set the text for the subtitle.
+    /// Subtitle Text. This is the actual text which will be displayed as a subtitle onscreen. Everything after the 9th comma is treated as the subtitle text, so it can include commas.
+    /// The text can include \n codes which is a line break, and can include Style Override control codes, which appear between braces { }.
     fn set_text(mut self, value: String) -> Self {
 		self.event.text = Some(value);
 		self
