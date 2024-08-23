@@ -6,7 +6,7 @@ authors = ["Aadish M <aadishmkerala@gmail.com>"]
 repository = "https://github.com/Aavtic/ass_parser"
 description = "A parser for editing creating and saving .ass files."
 license = "MIT OR Apache-2.0"
-keywords = ["subtitle", "ass", "parser", "Advanced-SubStation-Alpha"]
+keywords = ["subtitle", "ASS", "parser", "SubStation-Alpha"]
 readme = "README.md"
 
 [dependencies]
