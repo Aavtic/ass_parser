@@ -21,6 +21,18 @@ Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/
   ```shell
   cargo add ass_parser
   ```
+
+
+ [FFmpeg]: https://www.ffmpeg.org/about.html
+ [ass_parser]: https://github.com/Aavtic/ass_parser
+ [Crate Badge]: https://img.shields.io/crates/v/ass_parser?logo=rust&style=flat-square&logoColor=E05D44&color=E05D44
+[Docs Badge]: https://img.shields.io/docsrs/ass_parser?logo=rust&style=flat-square&logoColor=E05D44
+[Crate]: https://crates.io/crates/ass_parser/
+[Api Docs]: https://docs.rs/ass_parser/latest/ass_parser/
+[Deps.rs Badge]: https://deps.rs/repo/github/aavtic/ass_parser/status.svg?style=flat-square
+[Deps.rs]: https://deps.rs/crate/ass_parser
+[Matrix Badge]: https://img.shields.io/matrix/ass_parser:matrix.org.svg?style=flat-square&logo=matrix&label=Matrix&color=C43AC3
+[Matrix]: https://matrix.to/#/#ass_parser:matrix.org
  # Introduction
  
  AssParser is based on the principle of easy to read write and modify `.ass` files. This is the first version of `ass_parser`and now currently only have the features to modify `.ass` file.
