@@ -41,7 +41,7 @@ Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/
  
      ass_file.components.v4
          .set_v4(V4Format::default())
-         .set_primarycolour(hexcolor);
+         .set_primarycolour(&hexcolor);
  
      ass_file.components.events
          .set_events(Events::default());
