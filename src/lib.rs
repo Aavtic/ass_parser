@@ -82,6 +82,7 @@ use hex_color::HexColor;
 use std::{fs, io::Read};
 use std::io::{Seek, Write};
 use std::ops::Deref;
+use std::fmt;
 
 
 const SCRIPT_HEADER:&str = "[Script Info]";
@@ -94,6 +95,18 @@ const V4_HEADER:&str = "[V4+ Styles]";
 const V4_STYLE_HEAD:&str = "Style: ";
 const EVENTS_HEADER:&str = "[Events]";
 const EVENT_HEAD:&str = "Dialogue: ";
+
+
+type Result<T> = std::result::Result<T, IndexNotFound>;
+
+#[derive(Debug, Clone)]
+pub struct IndexNotFound;
+
+impl std::fmt::Display for IndexNotFound {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "The Index is not found on Dialogues.")
+    }
+}
 
 
 /// The First part of any Advanced SubStation Alpha file is `Script Info`.
@@ -599,7 +612,7 @@ pub struct Events {
 }
 
 impl Events {
-    fn new() -> Events {
+    pub fn new() -> Events {
         let dialogue = Dialogue::new();
         Events {
             dialogues: 
@@ -610,6 +623,50 @@ impl Events {
                         ]
                 }
         }
+    }
+
+    pub fn create(&mut self) -> Self {
+        self.clone()
+    }
+
+    pub fn add_first_dialogue(&mut self, dialogue: Dialogue) -> Result<&mut Self> {
+        match self.dialogues.dialogues.first_mut() {
+            Some(dlg) => {
+                *dlg = dialogue;
+                Ok(self)
+            },
+            None  => {
+                Err(IndexNotFound)
+            }
+        }
+    }
+
+    pub fn add_last_dialogue(&mut self, dialogue: Dialogue) -> Result<&mut Self> {
+        match self.dialogues.dialogues.last_mut() {
+            Some(dlg) => {
+                *dlg = dialogue;
+                Ok(self)
+            },
+            None  => {
+                Err(IndexNotFound)
+            }
+        }
+    }
+    pub fn add_n_dialogue(&mut self, n: usize, dialogue: Dialogue) -> Result<&mut Self> {
+        match self.dialogues.dialogues.get_mut(n) {
+            Some(dlg) => {
+                *dlg = dialogue;
+                Ok(self)
+            },
+            None  => {
+                Err(IndexNotFound)
+            }
+        }
+    }
+
+    pub fn add_dialogue(&mut self, dialogue: Dialogue) -> &mut Events {
+        self.dialogues.dialogues.push(dialogue);
+        self
     }
 }
 
@@ -646,7 +703,7 @@ struct Dialogues {
 /// A single `Dialogue` which contain `event` which can be used to modify the state of a
 /// `Dialogue`.
 #[derive(Debug, Clone)]
-struct Dialogue {
+pub struct Dialogue {
     event: EventFormat
 }
 
@@ -669,20 +726,20 @@ impl Default for EventFormat {
         EventFormat {
             layer: Some("0".to_string()),
             start: Some("0:00:00.00".to_string()),
-            end: Some("0:00:01.00".to_string()),
+            end: Some("0:00:00.00".to_string()),
             style: Some("Default".to_string()),
             name: Some("".to_string()),
             marginl: Some("0".to_string()),
             marginr: Some("0".to_string()),
             marginv: Some("0".to_string()),
             effect: Some("".to_string()),
-            text: Some("Hello Friend".to_string()),
+            text: None,
         }
     }
 }
 
 impl Dialogue {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             event: EventFormat {
                 layer: None,
@@ -700,20 +757,28 @@ impl Dialogue {
     }
 }
 
+impl Default for Dialogue {
+    fn default() -> Dialogue {
+        Dialogue {
+            event: EventFormat::default()
+        }
+    }
+}
+
 impl Dialogue {
     fn to_string(&self) -> String {
         let mut dialogue_string = String::new();
         dialogue_string.push_str(EVENT_HEAD);
-        dialogue_string.push_str(&(self.event.layer.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.start.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.end.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.style.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.name.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.marginl.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.marginr.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.marginv.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.effect.as_ref().unwrap().to_owned() + ","));
-        dialogue_string.push_str(&(self.event.text.as_ref().unwrap().to_owned() + "\n"));
+        dialogue_string.push_str(&(self.event.layer.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.start.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.end.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.style.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.name.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.marginl.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.marginr.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.marginv.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.effect.as_ref().unwrap_or(&"".to_owned()).to_owned() + ","));
+        dialogue_string.push_str(&(self.event.text.as_ref().unwrap_or(&"".to_owned()).to_owned() + "\n"));
 
         return dialogue_string;
     }
@@ -724,50 +789,50 @@ impl Dialogue {
     /// Layer (any integer)
     /// Subtitles having different layer number will be ignored during the collusion detection.
     /// Higher numbered layers will be drawn over the lower numbered.
-    fn set_layer(mut self, value: &str) -> Self {
+    pub fn set_layer(mut self, value: &str) -> Self {
 		self.event.layer = Some(value.to_string());
 		self
 	}
     /// set the start time of the subtitle.
     /// Start Time of the Event, in 0:00:00:00 format ie. Hrs:Mins:Secs:hundredths. This is the time elapsed during script playback at which the text will appear onscreen. Note that there is a single digit for the hours!
-    fn set_start(mut self, value: &str) -> Self {
+    pub fn set_start(mut self, value: &str) -> Self {
 		self.event.start = Some(value.to_string());
 		self
     }
 	/// set the end time of the subtitle.
     ///  End Time of the Event, in 0:00:00:00 format ie. Hrs:Mins:Secs:hundredths. This is the time elapsed during script playback at which the text will disappear offscreen. Note that there is a single digit for the hours!
-    fn set_end(mut self, value: &str) -> Self {
+    pub fn set_end(mut self, value: &str) -> Self {
 		self.event.end = Some(value.to_string());
 		self
 	}
     /// set the style.
     /// Style name. If it is "Default", then your own *Default style will be subtituted.
     ///However, the Default style used by the script author IS stored in the script even though SSA ignores it - so if you want to use it, the information is there - you could even change the Name in the Style definition line, so that it will appear in the list of "script" styles.
-    fn set_style(mut self, value: &str) -> Self {
+    pub fn set_style(mut self, value: &str) -> Self {
 		self.event.style = Some(value.to_string());
 		self
 	}
     /// set name.
     ///  Character name. This is the name of the character who speaks the dialogue. It is for information only, to make the script is easier to follow when editing/timing.
-    fn set_name(mut self, value: &str) -> Self {
+    pub fn set_name(mut self, value: &str) -> Self {
 		self.event.name = Some(value.to_string());
 		self
 	}
     /// set the marginl
     /// 4-figure Left Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
-    fn set_marginl(mut self, value: &str) -> Self {
+    pub fn set_marginl(mut self, value: &str) -> Self {
 		self.event.marginl = Some(value.to_string());
 		self
 	}
     /// set the marginr
     ///  4-figure Right Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
-    fn set_marginr(mut self, value: &str) -> Self {
+    pub fn set_marginr(mut self, value: &str) -> Self {
 		self.event.marginr = Some(value.to_string());
 		self
 	}
     /// set the marginv
     ///  4-figure Bottom Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
-    fn set_marginv(mut self, value: &str) -> Self {
+    pub fn set_marginv(mut self, value: &str) -> Self {
 		self.event.marginv = Some(value.to_string());
 		self
 	}
@@ -776,14 +841,14 @@ impl Dialogue {
     /// The effect names are case sensitive and must appear exactly as shown. The effect names do not have quote marks around them.
     /// "Karaoke" means that the text will be successively highlighted one word at a time.
     /// Karaoke as an effect type is obsolete.
-    fn set_effect(mut self, value: &str) -> Self {
+    pub fn set_effect(mut self, value: &str) -> Self {
 		self.event.effect = Some(value.to_string());
 		self
 	}
     /// set the text for the subtitle.
     /// Subtitle Text. This is the actual text which will be displayed as a subtitle onscreen. Everything after the 9th comma is treated as the subtitle text, so it can include commas.
     /// The text can include \n codes which is a line break, and can include Style Override control codes, which appear between braces { }.
-    fn set_text(mut self, value: &str) -> Self {
+    pub fn set_text(mut self, value: &str) -> Self {
 		self.event.text = Some(value.to_string());
 		self
 	}
@@ -1200,7 +1265,7 @@ impl AssFileOptions{
         return ass_format_color;
     }
 
-    fn _change_ass_subtitle_color(ass_file: &str, color: HexColor) -> Result<(), std::io::Error>{
+    fn _change_ass_subtitle_color(ass_file: &str, color: HexColor) -> std::result::Result<(), std::io::Error>{
         if !check_path_exists(ass_file){
             eprintln!("ERROR: File {} does not exist", ass_file);
             return Ok(());
@@ -1279,7 +1344,7 @@ fn write_contents(filename: &str, contents: &str) {
     file.write(contents.as_bytes()).unwrap();
 }
 
-fn get_contents(filename: &str) -> Result<String, std::io::Error>{
+fn get_contents(filename: &str) -> std::result::Result<String, std::io::Error>{
     if !check_path_exists(filename){
         eprintln!("ERROR: File {} does not exist", filename);
         return Err(std::io::ErrorKind::NotFound.into());
