@@ -61,6 +61,101 @@
 /// Dialogue: 0,0:00:00.00,0:00:01.00,Default,,0,0,0,,Hello Friend
 /// ```
 ///
+/// # Add Dialogues
+///
+/// ```rust
+/// use ass_parser::{self, AssFile, ScriptInfo, V4Format, Events, AssFileOptions, Dialogue};
+/// use ass_parser::IndexNotFound;
+/// use hex_color::HexColor;
+/// 
+/// fn main() -> Result<(), IndexNotFound>{
+///     let mut ass_file = AssFile::new();
+///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+/// 
+///     let first_dialogue = Dialogue::default()
+///         .set_text("Hello There!")
+///         .set_start("0:00:00.10")
+///         .set_end("0:00:00.50");
+/// 
+///     let second_dialogue = Dialogue::default()
+///         .set_text("Hello Friend!")
+///         .set_start("00:00.50")
+///         .set_end("00:00.58");
+/// 
+///     let third_dialogue = Dialogue::default()
+///         .set_text("Hello World!!")
+///         .set_start("0:00:00.58")
+///         .set_end("0:00:01.01");
+/// 
+///     let events = Events::new()
+///         .add_first_dialogue(first_dialogue)?
+///         .add_dialogue(second_dialogue)
+///         .add_dialogue(third_dialogue)
+///         .create();
+/// 
+/// 
+///     ass_file.components.script
+///         .set_script(ScriptInfo::default())
+///         .set_scripttype("FFMPEG");
+/// 
+///     ass_file.components.v4
+///         .set_v4(V4Format::default())
+///         .set_primarycolour(&hexcolor);
+/// 
+///     ass_file.components.events
+///         .set_events(events);
+/// 
+///     AssFile::save_file(&ass_file, "new_subtitles.ass");
+/// 
+///     Ok(())
+/// 
+/// }
+/// ```
+///
+/// ## This will generate an ASS file which would be similiar to this
+///
+/// ```
+///ScriptType: FFMPEG
+///PlayResX: 384
+///PlayResY: 288
+///ScaledBorderAndShadow: yes
+///YCbCr Matrix: None
+///
+///
+///[V4+ Styles]
+///Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+///Style: Default,Arial,16,&H0ffff,&Hffffff,&H0,&H0,0,0,0,0,100,100,0,0,1,1,0,2,10,10,10,1
+///
+///
+///[Events]
+///Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+///Dialogue: 0,0:00:00.10,0:00:00.50,Default,,0,0,0,,Hello There!
+///Dialogue: 0,00:00.50,00:00.58,Default,,0,0,0,,Hello Friend!
+///Dialogue: 0,0:00:00.58,0:00:01.01,Default,,0,0,0,,Hello World!!
+/// ```
+/// # Events can also be created like this
+///
+///
+///```rust
+///let first_dialogue = Dialogue::default()
+///   .set_start("0:00:00.10")
+///   .set_end("0:00:00.50");
+///
+///let second_dialogue = Dialogue::default()
+///   .set_start("00:00.50")
+///   .set_end("00:00.58");
+///
+///let third_dialogue = Dialogue::default()
+///   .set_start("0:00:00.58")
+///   .set_end("0:00:01.01");
+///
+///let events = Events::new()
+///   .add_first_dialogue(first_dialogue)?
+///   .add_dialogue(second_dialogue)
+///   .add_dialogue(third_dialogue)
+///   .create();
+/// ```
+///
 /// You can burn this subtitle file to a video or use any video player to select a video file along
 /// with this subtitle file.
 ///
