@@ -1,8 +1,6 @@
 
 <div align="center">
 
-![Matrix](https://img.shields.io/matrix/ass_parser)
-
 
 [![Crate Badge]][Crate] [![Docs Badge]][API Docs] [![Deps.rs
 Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/d/ass_parser) [![Join Matrix Group](https://img.shields.io/badge/Join%20Matrix%20Group-Invite-brightgreen)](https://matrix.to/#/#ass_parser:matrix.org)
