@@ -31,7 +31,7 @@
 /// 
 ///     ass_file.components.v4
 ///         .set_v4(V4Format::default())
-///         .set_primarycolour(hexcolor);
+///         .set_primarycolour(&hexcolor);
 /// 
 ///     ass_file.components.events
 ///         .set_events(Events::default());
@@ -376,7 +376,7 @@ impl V4Format {
     /// 
     ///     ass_file.components.v4
     ///         .set_v4(V4Format::default())
-    ///         .set_primarycolour(hexcolor);
+    ///         .set_primarycolour(&hexcolor);
     /// 
     ///     ass_file.components.events
     ///         .set_events(Events::default());
@@ -403,7 +403,7 @@ impl V4Format {
     /// 
     ///     ass_file.components.v4
     ///         .set_v4(V4Format::default())
-    ///         .set_secondarycolour(hexcolor);
+    ///         .set_secondarycolour(&hexcolor);
     /// 
     ///     ass_file.components.events
     ///         .set_events(Events::default());
@@ -430,7 +430,7 @@ impl V4Format {
     /// 
     ///     ass_file.components.v4
     ///         .set_v4(V4Format::default())
-    ///         .set_outlinecolour(hexcolor);
+    ///         .set_outlinecolour(&hexcolor);
     /// 
     ///     ass_file.components.events
     ///         .set_events(Events::default());
@@ -457,7 +457,7 @@ impl V4Format {
     /// 
     ///     ass_file.components.v4
     ///         .set_v4(V4Format::default())
-    ///         .set_backcolour(hexcolor);
+    ///         .set_backcolour(&hexcolor);
     /// 
     ///     ass_file.components.events
     ///         .set_events(Events::default());
@@ -1155,7 +1155,6 @@ impl AssFile {
     ///
     /// fn main() {
     ///    let mut ass_file = ass_parser::AssFile::from_file("subtitles.ass".to_string());
-    ///    let color  = AssFileOptions::get_ass_color(HexColor::YELLOW);
     ///    ass_file.components.script 
     ///        .set_scripttype("v4.00+".to_string())
     ///        .set_playresx("384".to_string())
