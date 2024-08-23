@@ -168,8 +168,8 @@ impl ScriptInfo {
     /// This is the SSA script format version eg. "V4.00". It is used by SSA to give a warning if
     /// you are using a version of SSA older than the version that created the script.
     /// ASS version is “V4.00+”.
-    pub fn set_scripttype(&mut self, value: String) -> &mut Self {
-		self.scripttype = Some(value);
+    pub fn set_scripttype(&mut self, value: &str) -> &mut Self {
+		self.scripttype = Some(value.to_string());
 		self
 	}
     /// After creating the `AssFile` set the playresx of the .ass file.
@@ -178,8 +178,8 @@ impl ScriptInfo {
     ///
     /// If you don't want to specify any, the default playresx from the original `.ass` file will be
     /// used.
-    pub fn set_playresx(&mut self, value: String) -> &mut Self {
-		self.playresx = Some(value);
+    pub fn set_playresx(&mut self, value: &str) -> &mut Self {
+		self.playresx = Some(value.to_string());
 		self
 	}
     /// After creating the `AssFile` set the playresy of the .ass file.
@@ -189,22 +189,22 @@ impl ScriptInfo {
     /// If you want to specify any, the default playresy from the original `.ass` file will be
     /// used.
     /// 
-    pub fn set_playresy(&mut self, value: String) -> &mut Self {
-		self.playresy = Some(value);
+    pub fn set_playresy(&mut self, value: &str) -> &mut Self {
+		self.playresy = Some(value.to_string());
 		self
 	}
     /// After creating the `AssFile` set the scaledborderandshadow of the .ass file.
     /// If you want to specify any, the default scaledborderandshadowfrom the original `.ass` file will be
     /// used.
-    pub fn set_scaledborderandshadow(&mut self, value: String) -> &mut Self {
-		self.scaledborderandshadow = Some(value);
+    pub fn set_scaledborderandshadow(&mut self, value: &str) -> &mut Self {
+		self.scaledborderandshadow = Some(value.to_string());
 		self
 	}
     /// After creating the `AssFile` set the ycbcr_matrix( of the .ass file.
     /// If you want to specify any, the default ycbcr_matrix from the original `.ass` file will be
     /// used.
-    pub fn set_ycbcr_matrix(&mut self, value: String) -> &mut Self {
-		self.ycbcr_matrix = Some(value);
+    pub fn set_ycbcr_matrix(&mut self, value: &str) -> &mut Self {
+		self.ycbcr_matrix = Some(value.to_string());
 		self
 	}
 }
@@ -999,11 +999,11 @@ impl Parser {
 
         let mut scriptinfo = ScriptInfo::new();
         let script_info = scriptinfo.
-            set_scripttype(script_type.unwrap()).
-            set_playresx(script_playerresx.unwrap()).
-            set_playresy(script_playerresy.unwrap()).
-            set_scaledborderandshadow(script_scaledborderandshadow.unwrap()).
-            set_ycbcr_matrix(script_ycbcr_matrix.unwrap()).clone();
+            set_scripttype(&script_type.unwrap()).
+            set_playresx(&script_playerresx.unwrap()).
+            set_playresy(&script_playerresy.unwrap()).
+            set_scaledborderandshadow(&script_scaledborderandshadow.unwrap()).
+            set_ycbcr_matrix(&script_ycbcr_matrix.unwrap()).clone();
 
         Some(script_info)
 }
