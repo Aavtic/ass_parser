@@ -724,51 +724,51 @@ impl Dialogue {
     /// Layer (any integer)
     /// Subtitles having different layer number will be ignored during the collusion detection.
     /// Higher numbered layers will be drawn over the lower numbered.
-    fn set_layer(mut self, value: String) -> Self {
-		self.event.layer = Some(value);
+    fn set_layer(mut self, value: &str) -> Self {
+		self.event.layer = Some(value.to_string());
 		self
 	}
     /// set the start time of the subtitle.
     /// Start Time of the Event, in 0:00:00:00 format ie. Hrs:Mins:Secs:hundredths. This is the time elapsed during script playback at which the text will appear onscreen. Note that there is a single digit for the hours!
-    fn set_start(mut self, value: String) -> Self {
-		self.event.start = Some(value);
+    fn set_start(mut self, value: &str) -> Self {
+		self.event.start = Some(value.to_string());
 		self
     }
 	/// set the end time of the subtitle.
     ///  End Time of the Event, in 0:00:00:00 format ie. Hrs:Mins:Secs:hundredths. This is the time elapsed during script playback at which the text will disappear offscreen. Note that there is a single digit for the hours!
-    fn set_end(mut self, value: String) -> Self {
-		self.event.end = Some(value);
+    fn set_end(mut self, value: &str) -> Self {
+		self.event.end = Some(value.to_string());
 		self
 	}
     /// set the style.
     /// Style name. If it is "Default", then your own *Default style will be subtituted.
     ///However, the Default style used by the script author IS stored in the script even though SSA ignores it - so if you want to use it, the information is there - you could even change the Name in the Style definition line, so that it will appear in the list of "script" styles.
-    fn set_style(mut self, value: String) -> Self {
-		self.event.style = Some(value);
+    fn set_style(mut self, value: &str) -> Self {
+		self.event.style = Some(value.to_string());
 		self
 	}
     /// set name.
     ///  Character name. This is the name of the character who speaks the dialogue. It is for information only, to make the script is easier to follow when editing/timing.
-    fn set_name(mut self, value: String) -> Self {
-		self.event.name = Some(value);
+    fn set_name(mut self, value: &str) -> Self {
+		self.event.name = Some(value.to_string());
 		self
 	}
     /// set the marginl
     /// 4-figure Left Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
-    fn set_marginl(mut self, value: String) -> Self {
-		self.event.marginl = Some(value);
+    fn set_marginl(mut self, value: &str) -> Self {
+		self.event.marginl = Some(value.to_string());
 		self
 	}
     /// set the marginr
     ///  4-figure Right Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
-    fn set_marginr(mut self, value: String) -> Self {
-		self.event.marginr = Some(value);
+    fn set_marginr(mut self, value: &str) -> Self {
+		self.event.marginr = Some(value.to_string());
 		self
 	}
     /// set the marginv
     ///  4-figure Bottom Margin override. The values are in pixels. All zeroes means the default margins defined by the style are used.
-    fn set_marginv(mut self, value: String) -> Self {
-		self.event.marginv = Some(value);
+    fn set_marginv(mut self, value: &str) -> Self {
+		self.event.marginv = Some(value.to_string());
 		self
 	}
     /// set effects for the Dialogue object.
@@ -776,15 +776,15 @@ impl Dialogue {
     /// The effect names are case sensitive and must appear exactly as shown. The effect names do not have quote marks around them.
     /// "Karaoke" means that the text will be successively highlighted one word at a time.
     /// Karaoke as an effect type is obsolete.
-    fn set_effect(mut self, value: String) -> Self {
-		self.event.effect = Some(value);
+    fn set_effect(mut self, value: &str) -> Self {
+		self.event.effect = Some(value.to_string());
 		self
 	}
     /// set the text for the subtitle.
     /// Subtitle Text. This is the actual text which will be displayed as a subtitle onscreen. Everything after the 9th comma is treated as the subtitle text, so it can include commas.
     /// The text can include \n codes which is a line break, and can include Style Override control codes, which appear between braces { }.
-    fn set_text(mut self, value: String) -> Self {
-		self.event.text = Some(value);
+    fn set_text(mut self, value: &str) -> Self {
+		self.event.text = Some(value.to_string());
 		self
 	}
 }
@@ -1020,16 +1020,16 @@ impl Parser {
         for dialogue in &raw_dialogues {
             let splitted_dialogue: Vec<&str> = dialogue.split(',').collect();
             let dialogue = Dialogue::new().
-                set_layer(splitted_dialogue[0].to_string()).
-                set_start(splitted_dialogue[1].to_string()).
-                set_end(splitted_dialogue[2].to_string()).
-                set_style(splitted_dialogue[3].to_string()).
-                set_name(splitted_dialogue[4].to_string()).
-                set_marginl(splitted_dialogue[5].to_string()).
-                set_marginr(splitted_dialogue[6].to_string()).
-                set_marginv(splitted_dialogue[7].to_string()).
-                set_effect(splitted_dialogue[8].to_string()).
-                set_text(splitted_dialogue[9].to_string());
+                set_layer(splitted_dialogue[0]).
+                set_start(splitted_dialogue[1]).
+                set_end(splitted_dialogue[2]).
+                set_style(splitted_dialogue[3]).
+                set_name(splitted_dialogue[4]).
+                set_marginl(splitted_dialogue[5]).
+                set_marginr(splitted_dialogue[6]).
+                set_marginv(splitted_dialogue[7]).
+                set_effect(splitted_dialogue[8]).
+                set_text(splitted_dialogue[9]);
             
             dialogues.push(dialogue);
         }
