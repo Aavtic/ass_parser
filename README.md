@@ -1,8 +1,11 @@
 
 <div align="center">
 
+![Matrix](https://img.shields.io/matrix/ass_parser)
+
+
 [![Crate Badge]][Crate] [![Docs Badge]][API Docs] [![Deps.rs
-Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/d/ass_parser)
+Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/d/ass_parser) [![Join Matrix Group](https://img.shields.io/badge/Join%20Matrix%20Group-Invite-brightgreen)](https://matrix.to/#/#ass_parser:matrix.org)
 
 </div>
 
@@ -92,4 +95,5 @@ Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/
 [Api Docs]: https://docs.rs/ass_parser/latest/ass_parser/
 [Deps.rs Badge]: https://deps.rs/repo/github/aavtic/ass_parser/status.svg?style=flat-square
 [Deps.rs]: https://deps.rs/crate/ass_parser
- 
+[Matrix Badge]: https://img.shields.io/matrix/ass_parser:matrix.org.svg?style=flat-square&logo=matrix&label=Matrix&color=C43AC3
+[Matrix]: https://matrix.to/#/#ass_parser:matrix.org
