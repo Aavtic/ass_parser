@@ -612,6 +612,8 @@ pub struct Events {
 }
 
 impl Events {
+    /// Create a new instance of Event.
+    /// This will have `None` for all the fields for EventFormat. 
     pub fn new() -> Events {
         let dialogue = Dialogue::new();
         Events {
@@ -625,10 +627,33 @@ impl Events {
         }
     }
 
+   /// Create the final Event
+   /// This simply consumes the mutable self and returns self.
+   /// Call this function at the end of constructing an `Event`.
+   ///
+   /// # Example
+   /// ```rust
+   ///  let dialogue = Dialogue::default();
+   ///  let events = Events::new()
+   ///     .add_first_dialogue(dialogue.clone().set_text("Hello There!")).unwrap()
+   ///     .add_dialogue(dialogue.clone().set_text("Hello Friend!"))
+   ///     .add_n_dialogue(1, dialogue.clone().set_text("Hello Friend :)")).unwrap()
+   ///     .add_last_dialogue(dialogue.set_text("Bye Friend.")).unwrap()
+   ///     .create();
+   /// ```
+
     pub fn create(&mut self) -> Self {
         self.clone()
     }
 
+    /// Add a dialogue to the first of the `Events` Struct.
+    /// # Example
+    /// ```rust
+   ///  let dialogue = Dialogue::default();
+   ///  let events = Events::new()
+   ///     .add_first_dialogue(dialogue.set_text("Hello There!")).unwrap();
+   /// ```
+   /// 
     pub fn add_first_dialogue(&mut self, dialogue: Dialogue) -> Result<&mut Self> {
         match self.dialogues.dialogues.first_mut() {
             Some(dlg) => {
@@ -641,6 +666,13 @@ impl Events {
         }
     }
 
+    /// Add a dialogue to the last of the `Events` Struct.
+    /// # Example
+    /// ```rust
+   ///  let dialogue = Dialogue::default();
+   ///  let events = Events::new()
+   ///     .add_last_dialogue(dialogue.set_text("Hello There!")).unwrap();
+   /// ```
     pub fn add_last_dialogue(&mut self, dialogue: Dialogue) -> Result<&mut Self> {
         match self.dialogues.dialogues.last_mut() {
             Some(dlg) => {
@@ -652,6 +684,14 @@ impl Events {
             }
         }
     }
+
+    /// Add a dialogue to the nth position of the `Events` Struct.
+    /// # Example
+    /// ```rust
+   ///  let dialogue = Dialogue::default();
+   ///  let events = Events::new()
+   ///     .add_n_dialogue(dialogue.set_text("Hello There!")).unwrap();
+   /// ```
     pub fn add_n_dialogue(&mut self, n: usize, dialogue: Dialogue) -> Result<&mut Self> {
         match self.dialogues.dialogues.get_mut(n) {
             Some(dlg) => {
@@ -664,6 +704,13 @@ impl Events {
         }
     }
 
+    /// Add a dialogue to the end of the `Events` Struct.
+    /// # Example
+    /// ```rust
+   ///  let dialogue = Dialogue::default();
+   ///  let events = Events::new()
+   ///     .add_n_dialogue(dialogue.set_text("Hello There!")).unwrap();
+   /// ```
     pub fn add_dialogue(&mut self, dialogue: Dialogue) -> &mut Events {
         self.dialogues.dialogues.push(dialogue);
         self
