@@ -24,8 +24,8 @@ Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/
 
  # Introduction
  
- AssParser is based on the principle of easy to read write and modify `.ass` files. This is the first version of `ass_parser`and now currently only have the features to modify `.ass` file.
- 
+ AssParser is based on the principle of easy to read write and modify `.ass` files. You can create, modify and edit ASS files however you want using this tool.
+
  # Example
  
 Creating a simple `Advanced SubStation Alpha` `(.ass)` file with default values!
