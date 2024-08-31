@@ -124,7 +124,7 @@ fn main() -> Result<(), IndexNotFound>{
 }
 ```
 
-## This will generate an ASS file which would be similiar to this
+## This will generate an ASS file which would be similar to this
 
 ```
 ScriptType: FFMPEG
