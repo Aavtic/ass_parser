@@ -179,6 +179,7 @@ use std::io::{Seek, Write};
 use std::ops::Deref;
 use std::fmt;
 
+mod parser;
 
 const SCRIPT_HEADER:&str = "[Script Info]";
 const SCRIPT_TYPE:&str = "ScriptType: ";
@@ -1042,6 +1043,9 @@ impl AssFile {
             }
         }
     }
+
+    pub fn from_srt() {
+    }
 }
 
 struct Parser; 
@@ -1496,3 +1500,20 @@ fn get_contents(filename: &str) -> std::result::Result<String, std::io::Error>{
 
 // Dialogue: 0,0:00:05.00,0:00:10.00,Default,,0,0,0,,{\c&H44cbe3&}This text should be cyan without background.
 // Dialogue: 0,0:00:05.00,0:00:10.00,Default,,0,0,0,,This text should be cyan without background.
+//
+
+
+
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+
+    #[test]
+    fn test_file_contents() {
+        let file_contents = fs::read_to_string("examples/rapgod.srt").unwrap();
+        parser::parse_srt(file_contents);
+    }
+}
