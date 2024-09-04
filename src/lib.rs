@@ -178,6 +178,7 @@ use std::{fs, io::Read};
 use std::io::{Seek, Write};
 use std::ops::Deref;
 use std::fmt;
+use std::iter::Iterator;
 
 mod parser;
 
@@ -1017,6 +1018,13 @@ pub struct Srt {
     srt_data: SrtData,
 }
 
+impl Srt {
+    fn iter(&self) -> std::slice::Iter<'_, parser::SrtData> {
+        let iterator = self.srt_data.iter();
+        return iterator;
+    }
+}
+
 
 /// # AssFile represents an instance of an existing `.ass` file.
 ///  The `AssFile::from_file function can be used to construct an `AssFile` from an existing `.ass
@@ -1529,6 +1537,15 @@ mod tests {
         let file_contents = get_contents("examples/rapgod.srt").unwrap();
 
         let srt_data = SrtData::new();
-        srt_data.parse_srt(file_contents);
+        let srt_content = srt_data.parse_srt(file_contents);
+
+        let test_srt_content = SrtData { 
+            index: "0".to_string(),
+			start: "00:00:01,500".to_string(),
+			end: "00:00:04,900".to_string(),
+			text: "Look, I was gonna go easy on you and not to hurt your feelings ".to_string(),
+         };
+
+        assert_eq!(test_srt_content, srt_content[0]);
     }
 }
