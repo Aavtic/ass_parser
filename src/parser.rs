@@ -43,12 +43,15 @@ impl SrtData {
         return segments;
     }
 
-    fn parse_timestamps(&self, timestamps: String) -> Vec<String> {
+    fn parse_timestamps(&self, timestamps: String) -> [String; 2] {
         let timestamp_splitted: Vec<&str> = timestamps.split(" --> ").collect();
         let timestamps_str: Vec<String> = timestamp_splitted.iter().map(|s| s.to_string()).collect();
         assert_eq!(2, timestamps_str.len());
 
-        return timestamps_str;
+        let start_timestamp = timestamps_str[0].replace(",", ".");
+        let end_timestamp = timestamps_str[1].replace(",", ".");
+
+        return [start_timestamp, end_timestamp];
     }
 
     fn get_srt(&self, srt_data: Segments) -> SrtContent {
