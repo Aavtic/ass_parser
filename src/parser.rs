@@ -1,11 +1,11 @@
 struct SrtFile;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SrtData {
-    index: String,
-    start: String,
-    end: String,
-    text: String,
+    pub index: String,
+    pub start: String,
+    pub end: String,
+    pub text: String,
 }
 
 type Segments = Vec<Vec<String>>;
@@ -62,7 +62,7 @@ impl SrtData {
             let end = &timestamps[1];
 
             for srt_text in srt_data {
-                text.push_str(srt_text.as_str());
+                text.push_str(&(srt_text.to_owned() + " "));
             }
 
             let srt_data = SrtData {
