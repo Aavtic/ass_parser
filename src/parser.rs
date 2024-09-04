@@ -9,7 +9,7 @@ pub struct SrtData {
 }
 
 type Segments = Vec<Vec<String>>;
-type SrtContent = Vec<SrtData>;
+pub type SrtContent = Vec<SrtData>;
 
 
 impl SrtData {
