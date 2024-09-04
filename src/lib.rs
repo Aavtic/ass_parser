@@ -181,7 +181,7 @@ use std::fmt;
 
 mod parser;
 
-type SrtData = parser::SrtData;
+type SrtData = parser::SrtContent;
 
 const SCRIPT_HEADER:&str = "[Script Info]";
 const SCRIPT_TYPE:&str = "ScriptType: ";
@@ -1054,6 +1054,10 @@ impl AssFile {
         let file_contents = get_contents(filename).unwrap();
         let srtdata = parser::SrtData::new();
         let srt = srtdata.parse_srt(file_contents);
+
+        Srt {
+            srt_data: srt,
+        }
     }
 }
 
