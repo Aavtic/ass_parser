@@ -1019,7 +1019,7 @@ pub struct Srt {
 }
 
 impl Srt {
-    fn iter(&self) -> std::slice::Iter<'_, parser::SrtData> {
+    pub fn iter(&self) -> std::slice::Iter<'_, parser::SrtData> {
         let iterator = self.srt_data.iter();
         return iterator;
     }
@@ -1541,8 +1541,8 @@ mod tests {
 
         let test_srt_content = SrtData { 
             index: "0".to_string(),
-			start: "00:00:01,500".to_string(),
-			end: "00:00:04,900".to_string(),
+			start: "00:00:01.500".to_string(),
+			end: "00:00:04.900".to_string(),
 			text: "Look, I was gonna go easy on you and not to hurt your feelings ".to_string(),
          };
 
