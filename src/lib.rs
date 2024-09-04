@@ -181,6 +181,8 @@ use std::fmt;
 
 mod parser;
 
+type SrtData = parser::SrtData;
+
 const SCRIPT_HEADER:&str = "[Script Info]";
 const SCRIPT_TYPE:&str = "ScriptType: ";
 const SCRIPT_PLAYRESX:&str = "PlayResX: ";
@@ -1011,12 +1013,16 @@ pub struct Components {
 }
 
 
-#[derive(Clone)]
+pub struct Srt {
+    srt_data: SrtData,
+}
+
 
 /// # AssFile represents an instance of an existing `.ass` file.
 ///  The `AssFile::from_file function can be used to construct an `AssFile` from an existing `.ass
 ///  file`.
 
+#[derive(Clone)]
 pub struct AssFile{
     _ass_file: String,
     /// Each components present in a `.ass` file. 
@@ -1044,7 +1050,10 @@ impl AssFile {
         }
     }
 
-    pub fn from_srt() {
+    pub fn from_srt(filename: &str) -> Srt {
+        let file_contents = get_contents(filename).unwrap();
+        let srtdata = parser::SrtData::new();
+        let srt = srtdata.parse_srt(file_contents);
     }
 }
 
@@ -1509,11 +1518,13 @@ fn get_contents(filename: &str) -> std::result::Result<String, std::io::Error>{
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs;
 
     #[test]
     fn test_file_contents() {
-        let file_contents = fs::read_to_string("examples/rapgod.srt").unwrap();
-        parser::parse_srt(file_contents);
+        use parser::SrtData;
+        let file_contents = get_contents("examples/rapgod.srt").unwrap();
+
+        let srt_data = SrtData::new();
+        srt_data.parse_srt(file_contents);
     }
 }
