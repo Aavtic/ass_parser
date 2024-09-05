@@ -2,9 +2,13 @@ struct SrtFile;
 
 #[derive(Debug, PartialEq)]
 pub struct SrtData {
+    /// The index of the srt segment.
     pub index: String,
+    /// the start timestamp.
     pub start: String,
+    ///  the end timestamp.
     pub end: String,
+    /// The caption in the srt segment.
     pub text: String,
 }
 
