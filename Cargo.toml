@@ -10,6 +10,7 @@ keywords = ["subtitle", "ASS", "parser", "SubStation-Alpha"]
 readme = "README.md"
 
 [dependencies]
-hex_color = "3.0.0"
+hex_color = {version = "3.0.0", features = ["rand", "std"]}
+rand = "0.8.5"
 
 
