@@ -1,6 +1,7 @@
 use hex_color::HexColor;
 use ass_parser::{AssFile, AssFileOptions};
 use ass_parser::{ScriptInfo, V4Format, Events, Dialogue};
+use rand;
 
 fn main() {
     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
@@ -8,16 +9,18 @@ fn main() {
     let mut ass_file = AssFile::new();
     let mut event = Events::default();
 
-
     for srt_seg in srt_file.iter() {
         let start = &srt_seg.start;
         let end = &srt_seg.end;
         let text = &srt_seg.text;
 
+        let random_color:HexColor = rand::random();
+
         let dialogue = Dialogue::default()
             .set_start(&start)
             .set_end(&end)
-            .set_text(&text);
+            .set_text(&text)
+            .set_colour(random_color);
 
         event.add_dialogue(dialogue);
     }
