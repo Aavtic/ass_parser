@@ -1475,7 +1475,6 @@ impl AssFileOptions{
         let mut ass_format_color = format!(r"\c&H{}&", reversed_hex_color);
         ass_format_color.push('}');
         ass_format_color = "{".to_owned() + &ass_format_color;
-        println!("{}", ass_format_color);
 
         return ass_format_color;
     }
