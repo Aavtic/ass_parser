@@ -8,15 +8,18 @@ fn main() -> Result<(), IndexNotFound>{
 
     let first_dialogue = Dialogue::default()
         .set_start("0:00:00.10")
-        .set_end("0:00:00.50");
+        .set_end("0:00:00.50")
+        .set_text("Hello There.");
 
     let second_dialogue = Dialogue::default()
         .set_start("00:00.50")
-        .set_end("00:00.58");
+        .set_end("00:00.58")
+        .set_text("Hello Friend.");
 
     let third_dialogue = Dialogue::default()
         .set_start("0:00:00.58")
-        .set_end("0:00:01.01");
+        .set_end("0:00:01.01")
+        .set_text("Goodbye Friend.");
 
     let events = Events::new()
         .add_first_dialogue(first_dialogue)?
