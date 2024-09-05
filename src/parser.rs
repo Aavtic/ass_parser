@@ -48,8 +48,13 @@ impl SrtData {
         let timestamps_str: Vec<String> = timestamp_splitted.iter().map(|s| s.to_string()).collect();
         assert_eq!(2, timestamps_str.len());
 
-        let start_timestamp = timestamps_str[0].replace(",", ".");
-        let end_timestamp = timestamps_str[1].replace(",", ".");
+        let mut start_timestamp = timestamps_str[0].replace(",", ".");
+        let mut end_timestamp = timestamps_str[1].replace(",", ".");
+
+        start_timestamp = start_timestamp.chars().skip(1).collect();
+        start_timestamp.pop();
+        end_timestamp = end_timestamp.chars().skip(1).collect();
+        end_timestamp.pop();
 
         return [start_timestamp, end_timestamp];
     }
