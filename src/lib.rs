@@ -1058,6 +1058,20 @@ impl AssFile {
         }
     }
 
+    /// Load Subtitles from a SubRip file.
+    ///
+    /// # Example
+    /// ``` rust
+    /// let srt_file = AssFile::from_srt("sample.srt");
+    ///
+    /// for srt_seg in srt_file.iter() {
+    ///    let start = &srt_seg.start;
+    ///    let end = &srt_seg.end;
+    ///    let text = &srt_seg.text;
+    ///
+    ///    println!("Start: {}\nEnd: {}\ntext: {}", start, end, text);
+    /// 
+    ///} ```
     pub fn from_srt(filename: &str) -> Srt {
         let file_contents = get_contents(filename).unwrap();
         let srtdata = parser::SrtData::new();
