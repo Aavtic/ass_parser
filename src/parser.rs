@@ -1,5 +1,3 @@
-struct SrtFile;
-
 #[derive(Debug, PartialEq)]
 pub struct SrtData {
     /// The index of the srt segment.
