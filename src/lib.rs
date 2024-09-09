@@ -112,6 +112,78 @@
 /// }
 /// ```
 ///
+/// # Add Colors to Subtitles.
+///
+/// You can add individual colors to each subtitles using the `.set_colour()` function. This
+/// function takes HexColor. Make sure that you are using rand + std features to generate random colors via rand out of the box.
+///
+/// ```rust
+///
+///let random_color:HexColor = rand::random();
+///
+///let dialogue = Dialogue::default()
+///    .set_start(&start)
+///    .set_end(&end)
+///    .set_text(&text)
+///    .set_colour(random_color);
+///
+///event.add_dialogue(dialogue);
+/// ```
+///
+/// # Added Support for SubRip files.
+///
+/// Now you can load `.srt` files and convert them to `.ass` files and even modify them on the
+/// process too. Here is an example from the `examples` directory.
+///
+/// In this example we load an SubRip file (`RapGod.srt`) and extract each subtitle from it and
+/// modify them by adding random colors to each subtitle. Then finally converting it to a `.ass`
+/// file and saving it.
+///
+/// ```rust
+/// use hex_color::HexColor;
+/// use ass_parser::{AssFile, AssFileOptions};
+/// use ass_parser::{ScriptInfo, V4Format, Events, Dialogue};
+/// use rand;
+/// 
+/// fn main() {
+///     let hexcolor = AssFileOptions::get_ass_color(HexColor::YELLOW);
+///     let srt_file = AssFile::from_srt("RapGod.srt");
+///     let mut ass_file = AssFile::new();
+///     let mut event = Events::default();
+/// 
+///     for srt_seg in srt_file.iter() {
+///         let start = &srt_seg.start;
+///         let end = &srt_seg.end;
+///         let text = &srt_seg.text;
+/// 
+///         let random_color:HexColor = rand::random();
+/// 
+///         let dialogue = Dialogue::default()
+///             .set_start(&start)
+///             .set_end(&end)
+///             .set_text(&text)
+///             .set_colour(random_color);
+/// 
+///         event.add_dialogue(dialogue);
+///     }
+///     
+/// 
+///     ass_file.components.script
+///         .set_script(ScriptInfo::default());
+/// 
+/// 
+/// 
+///     ass_file.components.v4
+///         .set_v4(V4Format::default())
+///         .set_primarycolour(&hexcolor);
+///     ass_file.components.events
+///         .set_events(event);
+/// 
+///     AssFile::save_file(&ass_file, "new_subtitle.ass");
+/// }
+/// ```
+///
+///
 /// ## This will generate an ASS file which would be similiar to this
 ///
 /// ```
