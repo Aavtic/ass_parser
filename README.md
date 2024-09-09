@@ -8,7 +8,6 @@ Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/
 
 
  
-
  # AssParser
  
  [ass_parser] is a crate to parse .ass (Advanced SubStation Alpha) files. which is a subtitle file for creating and displaying subtitles in video files. It is widely used due to it's complex text formatting, positioning and styling. The Advanced SubStation Alpha is a successor
