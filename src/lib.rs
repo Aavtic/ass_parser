@@ -998,6 +998,20 @@ impl Dialogue {
 		self.event.text = Some(value.to_string());
 		self
 	}
+
+    /// set the color of the subtitle.
+    pub fn set_colour(self, color: HexColor) -> Self {
+        let colour = AssFileOptions::get_ass_color_text(color);
+        match &self.event.text {
+            Some(text) => {
+                let new_text = &(colour + text);
+                self.set_text(new_text)
+            },
+            None => {
+                self.set_text(&colour)
+            }
+        }
+    }
 }
 
 pub struct AssFileOptions{}
@@ -1058,6 +1072,20 @@ impl AssFile {
         }
     }
 
+    /// Load Subtitles from a SubRip file.
+    ///
+    /// # Example
+    /// ``` rust
+    /// let srt_file = AssFile::from_srt("sample.srt");
+    ///
+    /// for srt_seg in srt_file.iter() {
+    ///    let start = &srt_seg.start;
+    ///    let end = &srt_seg.end;
+    ///    let text = &srt_seg.text;
+    ///
+    ///    println!("Start: {}\nEnd: {}\ntext: {}", start, end, text);
+    /// 
+    ///} ```
     pub fn from_srt(filename: &str) -> Srt {
         let file_contents = get_contents(filename).unwrap();
         let srtdata = parser::SrtData::new();
@@ -1428,6 +1456,25 @@ impl AssFileOptions{
         let ass_format_color = format!("&H{}", reversed_hex_color);
         // ass_format_color.push('}');
         // ass_format_color = "{".to_owned() + &ass_format_color;
+
+        return ass_format_color;
+    }
+
+
+    pub fn get_ass_color_text(color: HexColor) -> String {
+        let red = color.r;
+        let green = color.g;
+        let blue = color.b;
+
+        let red_hex = format!("{:x}", red);
+        let green_hex = format!("{:x}", green);
+        let blue_hex = format!("{:x}", blue);
+
+        let reversed_hex_color = format!("{}{}{}", blue_hex, green_hex, red_hex);
+
+        let mut ass_format_color = format!(r"\c&H{}&", reversed_hex_color);
+        ass_format_color.push('}');
+        ass_format_color = "{".to_owned() + &ass_format_color;
 
         return ass_format_color;
     }

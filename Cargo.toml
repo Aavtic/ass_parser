@@ -1,6 +1,6 @@
 [package]
 name = "ass_parser"
-version = "0.1.4"
+version = "0.1.6"
 edition = "2021"
 authors = ["Aadish M <aadishmkerala@gmail.com>"]
 repository = "https://github.com/Aavtic/ass_parser"
@@ -10,6 +10,7 @@ keywords = ["subtitle", "ASS", "parser", "SubStation-Alpha"]
 readme = "README.md"
 
 [dependencies]
-hex_color = "3.0.0"
+hex_color = {version = "3.0.0", features = ["rand", "std"]}
+rand = "0.8.5"
 
 

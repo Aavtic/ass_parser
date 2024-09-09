@@ -4,9 +4,10 @@ version = 3
 
 [[package]]
 name = "ass_parser"
-version = "0.1.4"
+version = "0.1.6"
 dependencies = [
  "hex_color",
+ "rand",
 ]
 
 [[package]]
