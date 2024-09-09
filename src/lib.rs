@@ -1464,12 +1464,12 @@ impl AssFile {
     /// # use ass_parser::AssFile;
     /// let mut ass_file = ass_parser::AssFile::from_file("src/subtitles.ass".to_string());
     /// ```
-    pub fn from_file(filename: String) -> AssFile {
+    pub fn from_file(filename: &str) -> AssFile {
         let file_contents = get_contents(&filename).unwrap();
         let parser = Parser::new();
         let components = parser.get_each_components(file_contents);
         Self{
-            _ass_file: filename,
+            _ass_file: filename.to_string(),
             components,
         }
     }
@@ -1660,8 +1660,8 @@ mod tests {
 
         let test_srt_content = SrtData { 
             index: "0".to_string(),
-			start: "00:00:01.500".to_string(),
-			end: "00:00:04.900".to_string(),
+			start: "0:00:01.50".to_string(),
+			end: "0:00:04.90".to_string(),
 			text: "Look, I was gonna go easy on you and not to hurt your feelings ".to_string(),
          };
 
