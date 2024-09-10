@@ -2,7 +2,7 @@
 <div align="center">
 
 [![Crate Badge]][Crate] [![Docs Badge]][API Docs] [![Deps.rs
-Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/d/ass_parser) [![Join Matrix Group](https://img.shields.io/badge/Join%20Matrix%20Group-Invite-brightgreen)](https://matrix.to/#/#ass_parser:matrix.org)
+Badge]][Deps.rs]<br> ![Crates.io Total Downloads](https://img.shields.io/crates/d/ass_parser) [![Join Matrix Group](https://img.shields.io/badge/Join%20Matrix%20Group-Invite-brightgreen)](https://matrix.to/#/#ass_parser:matrix.org) ![GitHub last commit](https://img.shields.io/github/last-commit/Aavtic/ass_parser)
 
 </div>
 
@@ -265,3 +265,4 @@ ffmpeg -i video.avi -vf "ass=new_subtitles.ass" output.avi
 [Deps.rs]: https://deps.rs/crate/ass_parser
 [Matrix Badge]: https://img.shields.io/matrix/ass_parser:matrix.org.svg?style=flat-square&logo=matrix&label=Matrix&color=C43AC3
 [Matrix]: https://matrix.to/#/#ass_parser:matrix.org
+
