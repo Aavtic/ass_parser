@@ -284,7 +284,7 @@ impl std::fmt::Display for IndexNotFound {
 /// This holds necessary information which include the version the resolution of subtitles etc of
 /// the `.ass` file.
 
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct ScriptInfo {
     scripttype: Option<String>,
     playresx: Option<String>,
@@ -400,7 +400,7 @@ impl ScriptInfo {
 /// This is the part which has fields separated by comma which specify the format, styling,
 /// encoding colors and many other important parts of the the `.ass` file.
 
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct V4Format {
     name: Option<String>,
     fontname: Option<String>,
@@ -777,7 +777,7 @@ impl V4Format {
 /// In `Advanced SubStation Alpha` Events is the core part of the subtitle file.
 /// This contains Dialogues which can be subtitle text. and even Graphics.
 
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Events {
     dialogues: Dialogues,
 }
@@ -913,19 +913,19 @@ impl Events {
 
 /// # Dialogues
 /// This stores each `Dialogue: ` field in an `Advanced SubStation File`
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq,Clone)]
 struct Dialogues {
     dialogues: Vec<Dialogue>
 }
 
 /// A single `Dialogue` which contain `event` which can be used to modify the state of a
 /// `Dialogue`.
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Dialogue {
     event: EventFormat
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq,Clone)]
 struct EventFormat {
     layer: Option<String>,
     start: Option<String>,
@@ -1089,7 +1089,7 @@ impl Dialogue {
 pub struct AssFileOptions{}
 
 /// `script`, `v4` and `event` are fields in `Components`
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct Components {
     /// instance holding the scirpt field.
     pub script: ScriptInfo,
@@ -1116,7 +1116,7 @@ impl Srt {
 ///  The `AssFile::from_file function can be used to construct an `AssFile` from an existing `.ass
 ///  file`.
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq,Debug)]
 pub struct AssFile{
     _ass_file: String,
     /// Each components present in a `.ass` file. 
@@ -1295,9 +1295,8 @@ impl Parser {
             script,
             v4,
             events,
-        }
-
-.clone()    }
+        }.clone()
+    }
     fn parse_script(&self, script_lines: Vec<String>) -> Option<ScriptInfo> {
         let mut script_type: Option<String>= None;
         let mut script_playerresx: Option<String>= None;
@@ -1462,7 +1461,7 @@ impl AssFile {
     /// # Example
     /// ```rust
     /// # use ass_parser::AssFile;
-    /// let mut ass_file = ass_parser::AssFile::from_file("src/subtitles.ass".to_string());
+    /// let mut ass_file = ass_parser::AssFile::from_file("src/subtitles.ass".to_string()).expect("error while reading file.");
     /// ```
     pub fn from_file(filename: &str) -> std::result::Result<AssFile, std::io::Error> {
         let file_contents = get_contents(&filename);
@@ -1640,16 +1639,10 @@ fn write_contents(filename: &str, contents: &str) {
 
 fn get_contents(filename: &str) -> std::result::Result<String, std::io::Error>{
     if !check_path_exists(filename){
-        eprintln!("ERROR: File {} does not exist", filename);
         return Err(std::io::ErrorKind::NotFound.into());
     }
     return fs::read_to_string(filename);
 }
-
-// Dialogue: 0,0:00:05.00,0:00:10.00,Default,,0,0,0,,{\c&H44cbe3&}This text should be cyan without background.
-// Dialogue: 0,0:00:05.00,0:00:10.00,Default,,0,0,0,,This text should be cyan without background.
-//
-
 
 
 
@@ -1674,5 +1667,13 @@ mod tests {
          };
 
         assert_eq!(test_srt_content, srt_content[0]);
+    }
+
+    #[test]
+    fn test_from_file_wrong() {
+        let result = AssFile::from_file("asdfasdf").map_err(|e| e.kind());
+        let expected = std::result::Result::Err(std::io::ErrorKind::NotFound);
+
+        assert_eq!(expected, result);
     }
 }
