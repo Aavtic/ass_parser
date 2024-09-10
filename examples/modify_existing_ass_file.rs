@@ -7,14 +7,14 @@ fn main() -> Result<(), std::io::Error>{
         .set_text("Hello Friend!");
     let primary_color = AssFileOptions::get_ass_color(HexColor::RED);
 
-
     ass_file.components.v4
         .set_primarycolour(&primary_color);
         
     ass_file.components.events
         .add_dialogue(dialogue);
 
-    AssFile::save_file(&ass_file, "new_subtitles.ass");
+    AssFile::save_file(&ass_file, "sub.ass");
+    println!("modified subtitles saved!");
 
     Ok(())
 }
