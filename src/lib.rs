@@ -1464,13 +1464,21 @@ impl AssFile {
     /// # use ass_parser::AssFile;
     /// let mut ass_file = ass_parser::AssFile::from_file("src/subtitles.ass".to_string());
     /// ```
-    pub fn from_file(filename: &str) -> AssFile {
-        let file_contents = get_contents(&filename).unwrap();
+    pub fn from_file(filename: &str) -> std::result::Result<AssFile, std::io::Error> {
+        let file_contents = get_contents(&filename);
         let parser = Parser::new();
-        let components = parser.get_each_components(file_contents);
-        Self{
-            _ass_file: filename.to_string(),
-            components,
+        match file_contents {
+            Ok(contents) => {
+                let components = parser.get_each_components(contents);
+                Ok(
+                    Self{
+                    _ass_file: filename.to_string(),
+                    components,
+                })
+            },
+            Err(e) => {
+                return Err(e)
+            }
         }
     }
 
