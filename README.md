@@ -89,8 +89,8 @@ fn main() -> Result<(), IndexNotFound>{
 
     let second_dialogue = Dialogue::default()
         .set_text("Hello Friend!")
-        .set_start("00:00.50")
-        .set_end("00:00.58");
+        .set_start("0:00:00.50")
+        .set_end("0:00:00.58");
 
     let third_dialogue = Dialogue::default()
         .set_text("Hello World!!")
