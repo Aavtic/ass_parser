@@ -1612,7 +1612,11 @@ impl AssFile {
         let file_contents = get_contents(&filename);
         let parser = Parser::new();
         match file_contents {
-            Ok(contents) => {
+            Ok(mut contents) => {
+                while !contents.starts_with("[") {
+                    contents.remove(0);
+                    
+                }
                 let components = parser.get_each_components(contents);
                 Ok(
                     Self{
