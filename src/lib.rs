@@ -1539,41 +1539,63 @@ impl Parser {
         Some(script_info)
 }
     fn parse_event(&self, event_lines: Vec<String>) -> Option<Events>{
-        // let mut events = Vec::new();
-        let mut raw_dialogues = Vec::new();
-        let mut dialogues = Vec::new();
+		let mut raw_dialogues = Vec::new();
+    let mut dialogues = Vec::new();
+
+    for line in event_lines {
+        if line.starts_with(EVENT_HEAD) {
+            raw_dialogues.push(line[EVENT_HEAD.len()..].to_string());
+        }
+    }
+
+    for d in &raw_dialogues {
+        let d = d.trim();
+        if d.is_empty() {
+            continue;
+        }
         
-        for line in event_lines {
-            if line.starts_with(EVENT_HEAD) {
-                raw_dialogues.push(line[EVENT_HEAD.len()..].to_string());
+        // Split into exactly 10 parts - first 9 fields + remaining text
+        let mut parts = Vec::new();
+        let mut start = 0;
+        let mut comma_count = 0;
+        
+        for (i, ch) in d.char_indices() {
+            if ch == ',' && comma_count < 9 {
+                parts.push(&d[start..i]);
+                start = i + 1;
+                comma_count += 1;
             }
         }
-        for dialogue in &raw_dialogues {
-            let splitted_dialogue: Vec<&str> = dialogue.split(',').collect();
-            let dialogue = Dialogue::new().
-                set_layer(splitted_dialogue[0]).
-                set_start(splitted_dialogue[1]).
-                set_end(splitted_dialogue[2]).
-                set_style(splitted_dialogue[3]).
-                set_name(splitted_dialogue[4]).
-                set_marginl(splitted_dialogue[5]).
-                set_marginr(splitted_dialogue[6]).
-                set_marginv(splitted_dialogue[7]).
-                set_effect(splitted_dialogue[8]).
-                set_text(splitted_dialogue[9]);
-            
-            dialogues.push(dialogue);
+        
+        // Add the remaining text (everything after the 9th comma)
+        if start < d.len() {
+            parts.push(&d[start..]);
+        } else {
+            parts.push("");
+        }
+        
+        // Ensure we have exactly 10 parts
+        if parts.len() != 10 {
+            eprintln!("Warning: Malformed dialogue line with {} parts: {}", parts.len(), d);
+            continue;
         }
 
-        let dialogues = Dialogues {
-            dialogues,
-        };
+        let dialogue = Dialogue::new()
+            .set_layer(parts[0].trim())
+            .set_start(parts[1].trim())
+            .set_end(parts[2].trim())
+            .set_style(parts[3].trim())
+            .set_name(parts[4].trim())
+            .set_marginl(parts[5].trim())
+            .set_marginr(parts[6].trim())
+            .set_marginv(parts[7].trim())
+            .set_effect(parts[8].trim())
+            .set_text(parts[9]); // Don't trim the text field as it may contain intentional spaces
+        
+        dialogues.push(dialogue);
+    }
 
-        return Some(Events {
-            dialogues,
-        })
-
-
+    Some(Events { dialogues: Dialogues { dialogues } })
     }
     fn parse_v4(&self, v4_lines: Vec<String>) -> Option<V4Format>{
         let mut style_line: Option::<String> = None;
@@ -1834,13 +1856,13 @@ fn _write_dialogues(filename: &str, dialogues: Vec<String>) {
     file.seek(std::io::SeekFrom::Start(dialogue_idx.try_into().unwrap())).unwrap();
 
     for line in dialogues {
-        file.write(line.as_bytes()).unwrap();
+        file.write_all(line.as_bytes()).unwrap();
     } 
 }
 
 fn write_contents(filename: &str, contents: &str) {
     let mut file = fs::File::create(filename).unwrap();
-    file.write(contents.as_bytes()).unwrap();
+    file.write_all(contents.as_bytes()).unwrap();
 }
 
 fn get_contents(filename: &str) -> std::result::Result<String, std::io::Error>{
@@ -1883,3 +1905,6 @@ mod tests {
         assert_eq!(expected, result);
     }
 }
+
+
+
